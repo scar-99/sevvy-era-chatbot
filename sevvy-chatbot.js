@@ -12,7 +12,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             </div>
             <button id="chat-toggle-btn">
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="black"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                <!-- --- NEW MINIMALIST SVG ICON --- -->
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white">
+                    <path d="M12 2l2.35 7.16h7.53l-6.09 4.42 2.35 7.16-6.14-4.42-6.14 4.42 2.35-7.16-6.09-4.42h7.53z"/>
+                </svg>
             </button>
         </div>
     `;
@@ -124,32 +127,4 @@ document.addEventListener('DOMContentLoaded', () => {
             sendMessage();
         }
     });
-
-    // Add some styles for the new FAQ buttons
-    const style = document.createElement('style');
-    style.textContent = `
-        #faq-buttons-container {
-            padding: 0 15px 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            border-top: 1px solid #E5E7EB;
-        }
-        .faq-button {
-            background-color: #F3F4F6;
-            border: 1px solid #E5E7EB;
-            border-radius: 8px;
-            padding: 10px;
-            cursor: pointer;
-            text-align: left;
-            font-weight: 500;
-            color: #1F2937;
-            transition: background-color 0.2s;
-        }
-        .faq-button:hover {
-            background-color: #E5E7EB;
-        }
-    `;
-    document.head.appendChild(style);
 });
-
