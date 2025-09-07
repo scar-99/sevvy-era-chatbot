@@ -1,5 +1,4 @@
 :root {
-    /* NEW: Vibrant color scheme */
     --sevvy-primary-color: #00C6FF;
     --sevvy-secondary-color: #0072FF;
     --sevvy-accent-color: #8E2DE2;
@@ -18,9 +17,8 @@
 #chat-toggle-btn {
     width: 60px;
     height: 60px;
-    /* NEW: Gradient background */
     background: linear-gradient(45deg, var(--sevvy-primary-color), var(--sevvy-accent-color));
-    border: none;
+    border: 2px solid white;
     border-radius: 50%;
     cursor: pointer;
     display: flex;
@@ -35,28 +33,18 @@
     box-shadow: 0 6px 25px rgba(0, 198, 255, 0.6);
 }
 
-#chat-toggle-btn.proactive-pulse {
-    animation: pulse 1s 2;
-}
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-    100% { transform: scale(1); }
-}
-
 #chat-toggle-btn svg {
     width: 32px;
     height: 32px;
     stroke: white;
-    transition: transform 0.3s ease;
 }
 
 #chat-window {
     width: 360px;
     height: 550px;
-    font-family: 'Poppins', sans-serif; /* More modern font */
+    font-family: 'Poppins', sans-serif;
     background-color: var(--sevvy-surface-color);
-    border: none; /* Removed border for a cleaner look */
+    border: none;
     border-radius: 20px;
     box-shadow: 0 10px 40px rgba(0,0,0,0.15);
     overflow: hidden;
@@ -79,7 +67,6 @@
 
 #chat-header {
     padding: 18px;
-    /* NEW: Gradient background */
     background: linear-gradient(90deg, var(--sevvy-primary-color), var(--sevvy-accent-color));
     color: white;
     font-weight: 700;
@@ -107,7 +94,6 @@
 }
 
 .user-message {
-    /* NEW: Gradient background */
     background: linear-gradient(90deg, var(--sevvy-primary-color), var(--sevvy-secondary-color));
     color: white;
     align-self: flex-end;
@@ -146,7 +132,7 @@
 }
 
 .faq-prompt-container {
-    align-self: center; /* Center the button */
+    align-self: center;
     margin-top: 5px;
 }
 
@@ -168,7 +154,6 @@
     transform: translateY(-2px);
 }
 
-/* NEW: Styles for the "Go Back" button */
 .back-btn {
     margin-bottom: 10px;
     border-color: #aaa;
@@ -179,7 +164,6 @@
     background-color: #777;
     border-color: #777;
 }
-
 
 #text-input-container {
     display: flex;
@@ -195,7 +179,6 @@
     border-color: var(--sevvy-primary-color);
 }
 
-
 #chat-input {
     background-color: transparent;
     border: none;
@@ -207,7 +190,6 @@
 }
 
 #send-btn {
-    /* NEW: Gradient background */
     background: linear-gradient(45deg, var(--sevvy-primary-color), var(--sevvy-accent-color));
     color: white;
     border: none;
@@ -226,7 +208,6 @@
     transform: scale(0.9);
 }
 
-/* Lead Capture & Calendly Styles */
 #lead-capture-form {
     display: flex;
     flex-direction: column;
@@ -257,5 +238,28 @@
 #calendly-iframe {
     width: 100%;
     height: 100%;
+}
+
+/* --- Proactive Message Bubble Styles --- */
+#proactive-message {
+    position: absolute;
+    bottom: 80px;
+    right: 0;
+    background: white;
+    color: var(--sevvy-text-color);
+    padding: 12px 18px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    font-size: 0.95rem;
+    font-weight: 500;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    pointer-events: none;
+}
+
+#proactive-message.visible {
+    opacity: 1;
+    transform: translateY(0);
 }
 

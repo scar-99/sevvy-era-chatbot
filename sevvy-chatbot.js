@@ -8,11 +8,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div id="chat-input-area">
                     <div id="faq-buttons-container"></div>
                     <div id="lead-capture-form" style="display: none;">
+                         <button class="faq-btn back-btn" id="back-from-lead-btn">« Go Back</button>
                         <input type="text" id="lead-name" placeholder="Your Full Name">
                         <input type="email" id="lead-email" placeholder="Your Email Address">
                         <button id="submit-lead-btn">Send Information</button>
                     </div>
                     <div id="calendly-container" style="display: none;">
+                        <button class="faq-btn back-btn" id="back-from-calendly-btn">« Go Back</button>
                         <iframe id="calendly-iframe" src="" frameborder="0"></iframe>
                     </div>
                     <div id="text-input-container">
@@ -40,6 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.insertAdjacentHTML('beforeend', chatbotHTML);
 
     // --- Element References ---
+    const chatWidgetContainer = document.getElementById('chat-widget-container');
     const chatWindow = document.getElementById('chat-window');
     const toggleButton = document.getElementById('chat-toggle-btn');
     const messagesContainer = document.getElementById('chat-messages');
@@ -51,15 +54,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const submitLeadBtn = document.getElementById('submit-lead-btn');
     const textInputContainer = document.getElementById('text-input-container');
     const chatInputArea = document.getElementById('chat-input-area');
+    const backFromLeadBtn = document.getElementById('back-from-lead-btn');
+    const backFromCalendlyBtn = document.getElementById('back-from-calendly-btn');
 
     // --- State Variables ---
     let chatHistory = [];
     let isFirstOpen = true;
-    let proactiveTimeout;
     
     // --- IMPORTANT: Use your specific Calendly EVENT link, not your main profile link ---
-    // Example: https://calendly.com/your-username/15min
-    const calendlyUrl = "https://calendly.com/rehanshamal368"; 
+    const calendlyUrl = "https://calendly.com/rehanshamal368/15min"; 
 
     // --- FAQ Data ---
     const faqs = [
@@ -83,22 +86,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         return messageElement;
     };
-
-    const showGoBackButton = () => {
-        // Remove any existing back button
-        const existingBackButton = document.getElementById('back-to-faq-btn');
-        if (existingBackButton) existingBackButton.remove();
-        
-        const backButton = document.createElement('button');
-        backButton.id = 'back-to-faq-btn';
-        backButton.className = 'faq-btn back-btn';
-        backButton.textContent = '« Go Back';
-        backButton.onclick = () => {
-            showFaqButtons();
-            backButton.remove();
-        };
-        chatInputArea.prepend(backButton);
-    };
     
     const showFaqButtons = () => {
         faqButtonsContainer.innerHTML = '';
@@ -113,9 +100,6 @@ document.addEventListener('DOMContentLoaded', () => {
         leadCaptureForm.style.display = 'none';
         calendlyContainer.style.display = 'none';
         textInputContainer.style.display = 'flex';
-        
-        const existingBackButton = document.getElementById('back-to-faq-btn');
-        if (existingBackButton) existingBackButton.remove();
     };
 
     const promptForFaqs = () => {
@@ -141,12 +125,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (faq.a) {
             addMessage(faq.a, 'bot', false);
             promptForFaqs();
-            textInputContainer.style.display = 'flex'; // Keep input visible
         }
         if (faq.type === 'lead-capture') {
             textInputContainer.style.display = 'none';
             leadCaptureForm.style.display = 'flex';
-            showGoBackButton();
         }
         if (faq.type === 'calendly') {
             textInputContainer.style.display = 'none';
@@ -155,7 +137,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 iframe.src = calendlyUrl;
             }
             calendlyContainer.style.display = 'block';
-            showGoBackButton();
         }
     };
     
@@ -188,7 +169,6 @@ document.addEventListener('DOMContentLoaded', () => {
             addMessage('Sorry, something went wrong connecting to the server.', 'bot-error', false);
         }
         
-        // Handle "ok" response
         const lowerCaseMessage = userMessage.toLowerCase();
         if (lowerCaseMessage === 'ok' || lowerCaseMessage === 'okay' || lowerCaseMessage === 'thanks') {
              addMessage("You're welcome! How else can I assist you?", 'bot', false);
@@ -207,8 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         addMessage("Thank you! Our team will be in touch shortly.", 'bot', false);
-        leadCaptureForm.style.display = 'none';
-        promptForFaqs();
+        showFaqButtons();
 
         try {
             await fetch('/api/handle-lead', {
@@ -229,7 +208,8 @@ document.addEventListener('DOMContentLoaded', () => {
             showFaqButtons();
             isFirstOpen = false;
         }
-        clearTimeout(proactiveTimeout);
+        const proactiveMessage = document.getElementById('proactive-message');
+        if (proactiveMessage) proactiveMessage.remove();
     });
 
     sendBtn.addEventListener('click', sendMessage);
@@ -240,21 +220,28 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     submitLeadBtn.addEventListener('click', submitLead);
+    backFromLeadBtn.addEventListener('click', showFaqButtons);
+    backFromCalendlyBtn.addEventListener('click', showFaqButtons);
     
-    // --- Proactive Engagement ---
-    const startProactiveTimer = () => {
-        proactiveTimeout = setTimeout(() => {
-            if (!chatWindow.classList.contains('visible')) {
-                toggleButton.classList.add('proactive-pulse');
-                setTimeout(() => toggleButton.classList.remove('proactive-pulse'), 2000);
-            }
-        }, 20000);
+    // --- NEW: Proactive Message Logic ---
+    const showProactiveMessage = () => {
+        if (chatWindow.classList.contains('visible')) return;
+
+        const messageBubble = document.createElement('div');
+        messageBubble.id = 'proactive-message';
+        messageBubble.textContent = 'How may I assist you?';
+        chatWidgetContainer.appendChild(messageBubble);
+
+        setTimeout(() => {
+            messageBubble.classList.add('visible');
+        }, 100);
+
+        setTimeout(() => {
+            messageBubble.classList.remove('visible');
+            setTimeout(() => messageBubble.remove(), 500);
+        }, 10000);
     };
     
-    startProactiveTimer();
-    document.addEventListener('click', () => {
-        clearTimeout(proactiveTimeout);
-        startProactiveTimer();
-    });
+    setTimeout(showProactiveMessage, 4000);
 });
 
