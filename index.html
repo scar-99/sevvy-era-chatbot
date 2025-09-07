@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sevvy Chatbot Test Page</title>
+
+    <!-- 1. This links to your chatbot's CSS file -->
+    <link rel="stylesheet" href="/sevvy-chatbot.css">
+
+    <style>
+        /* Basic styling for the test page */
+        body {
+            background-color: #f0f2f5;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #4b5563;
+        }
+        .container {
+            text-align: center;
+            border: 2px dashed #d1d5db;
+            padding: 50px;
+            border-radius: 15px;
+            max-width: 600px;
+        }
+        h1 {
+            font-size: 2.5rem;
+            color: #1f2937;
+        }
+        p {
+            font-size: 1.1rem;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Sevvy Chatbot Test Page</h1>
+        <p>This is a live preview environment. The chatbot should appear in the bottom-right corner.</p>
+    </div>
+
+    <!-- 2. This is the empty container where your chatbot will be built -->
+    <div id="chatbot-container"></div>
+
+    <!-- 3. This runs your chatbot's JavaScript code -->
+    <script src="/sevvy-chatbot.js" defer></script>
+
+</body>
+</html>
