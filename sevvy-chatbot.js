@@ -21,21 +21,21 @@ document.addEventListener('DOMContentLoaded', () => {
                         <input type="text" id="chat-input" placeholder="Ask a question...">
                         <button id="send-btn" aria-label="Send Message">
                              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M22 2L11 13" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
+                                 <path d="M22 2L11 13" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                 <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                             </svg>
                         </button>
                     </div>
                 </div>
             </div>
             <button id="chat-toggle-btn">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M16 4C19.3137 4 22 6.68629 22 10C22 13.3137 19.3137 16 16 16H8C4.68629 16 2 13.3137 2 10C2 6.68629 4.68629 4 8 4" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <circle cx="17" cy="9" r="1.5" fill="white"/>
-                    <circle cx="7" cy="11" r="1.5" fill="white"/>
-                    <path d="M12 4V8" stroke="white" stroke-width="2" stroke-linecap="round"/>
-                    <path d="M12 16V12" stroke="white" stroke-width="2" stroke-linecap="round"/>
-                </svg>
+                 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                     <path d="M16 4C19.3137 4 22 6.68629 22 10C22 13.3137 19.3137 16 16 16H8C4.68629 16 2 13.3137 2 10C2 6.68629 4.68629 4 8 4" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                     <circle cx="17" cy="9" r="1.5" fill="white"/>
+                     <circle cx="7" cy="11" r="1.5" fill="white"/>
+                     <path d="M12 4V8" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                     <path d="M12 16V12" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                 </svg>
             </button>
         </div>
     `;
@@ -149,7 +149,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const typingIndicator = addMessage('...', 'bot-typing', false);
 
         try {
-            const response = await fetch('/api/handle-chat', {
+            // UPDATED THIS LINE
+            const response = await fetch('https://sevvyera.com/.netlify/functions/handle-chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ message: userMessage, history: chatHistory }),
@@ -188,7 +189,8 @@ document.addEventListener('DOMContentLoaded', () => {
         showFaqButtons();
 
         try {
-            await fetch('/api/handle-lead', {
+            // UPDATED THIS LINE
+            await fetch('https://sevvyera.com/.netlify/functions/handle-lead', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name, email })
@@ -249,4 +251,3 @@ document.addEventListener('DOMContentLoaded', () => {
     // Trigger after 4 seconds
     setTimeout(showProactiveMessage, 4000);
 });
-
