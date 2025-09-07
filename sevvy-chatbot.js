@@ -17,12 +17,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <div id="text-input-container">
                         <input type="text" id="chat-input" placeholder="Ask a question...">
-                        <button id="send-btn" aria-label="Send Message">➤</button>
+                        <button id="send-btn" aria-label="Send Message">
+                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M22 2L11 13" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
                     </div>
                 </div>
             </div>
             <button id="chat-toggle-btn">
-                <!-- NEW CUSTOM SVG LOGO -->
                 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M16 4C19.3137 4 22 6.68629 22 10C22 13.3137 19.3137 16 16 16H8C4.68629 16 2 13.3137 2 10C2 6.68629 4.68629 4 8 4" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
                     <circle cx="17" cy="9" r="1.5" fill="white"/>
@@ -46,20 +50,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const calendlyContainer = document.getElementById('calendly-container');
     const submitLeadBtn = document.getElementById('submit-lead-btn');
     const textInputContainer = document.getElementById('text-input-container');
-
+    const chatInputArea = document.getElementById('chat-input-area');
 
     // --- State Variables ---
     let chatHistory = [];
     let isFirstOpen = true;
     let proactiveTimeout;
+    
+    // --- IMPORTANT: Use your specific Calendly EVENT link, not your main profile link ---
+    // Example: https://calendly.com/your-username/15min
     const calendlyUrl = "https://calendly.com/rehanshamal368"; 
 
     // --- FAQ Data ---
     const faqs = [
         { q: "What are your services?", a: "Sevvy Era offers a full suite of digital marketing services, including Web Development, Social Media Management, SEO, Video Editing, Lead Generation, and advanced Email Marketing campaigns." },
         { q: "How is pricing determined?", a: "All our strategies are custom-built. Pricing depends on the services you need and the scale of your project. The best first step is a free consultation to discuss your specific goals." },
-        { q:
-"Can you show me results?", a: "Absolutely. We focus on data-driven results. In our initial consultation, we can share case studies relevant to your industry and business goals." },
+        { q: "Can you show me results?", a: "Absolutely. We focus on data-driven results. In our initial consultation, we can share case studies relevant to your industry and business goals." },
         { q: "Submit My Info for a Quote", type: "lead-capture" },
         { q: "Book a Free Consultation", type: "calendly" }
     ];
@@ -77,6 +83,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         return messageElement;
     };
+
+    const showGoBackButton = () => {
+        // Remove any existing back button
+        const existingBackButton = document.getElementById('back-to-faq-btn');
+        if (existingBackButton) existingBackButton.remove();
+        
+        const backButton = document.createElement('button');
+        backButton.id = 'back-to-faq-btn';
+        backButton.className = 'faq-btn back-btn';
+        backButton.textContent = '« Go Back';
+        backButton.onclick = () => {
+            showFaqButtons();
+            backButton.remove();
+        };
+        chatInputArea.prepend(backButton);
+    };
     
     const showFaqButtons = () => {
         faqButtonsContainer.innerHTML = '';
@@ -91,6 +113,9 @@ document.addEventListener('DOMContentLoaded', () => {
         leadCaptureForm.style.display = 'none';
         calendlyContainer.style.display = 'none';
         textInputContainer.style.display = 'flex';
+        
+        const existingBackButton = document.getElementById('back-to-faq-btn');
+        if (existingBackButton) existingBackButton.remove();
     };
 
     const promptForFaqs = () => {
@@ -112,21 +137,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const handleFaqClick = (faq) => {
         addMessage(faq.q, 'user', false);
         faqButtonsContainer.style.display = 'none';
-        textInputContainer.style.display = 'none';
-
+        
         if (faq.a) {
             addMessage(faq.a, 'bot', false);
             promptForFaqs();
+            textInputContainer.style.display = 'flex'; // Keep input visible
         }
         if (faq.type === 'lead-capture') {
+            textInputContainer.style.display = 'none';
             leadCaptureForm.style.display = 'flex';
+            showGoBackButton();
         }
         if (faq.type === 'calendly') {
+            textInputContainer.style.display = 'none';
             const iframe = document.getElementById('calendly-iframe');
             if (iframe.src !== calendlyUrl) {
                 iframe.src = calendlyUrl;
             }
             calendlyContainer.style.display = 'block';
+            showGoBackButton();
         }
     };
     
@@ -150,16 +179,23 @@ document.addEventListener('DOMContentLoaded', () => {
             typingIndicator.remove();
 
             if (!response.ok) {
-                addMessage(data.reply || 'Sorry, an error occurred.', 'bot', false);
+                addMessage(data.reply || 'Sorry, an error occurred.', 'bot-error', false);
             } else {
                 addMessage(data.reply, 'bot');
             }
         } catch (error) {
             typingIndicator.remove();
-            addMessage('Sorry, something went wrong connecting to the server.', 'bot', false);
+            addMessage('Sorry, something went wrong connecting to the server.', 'bot-error', false);
         }
         
-        promptForFaqs();
+        // Handle "ok" response
+        const lowerCaseMessage = userMessage.toLowerCase();
+        if (lowerCaseMessage === 'ok' || lowerCaseMessage === 'okay' || lowerCaseMessage === 'thanks') {
+             addMessage("You're welcome! How else can I assist you?", 'bot', false);
+             showFaqButtons();
+        } else {
+             promptForFaqs();
+        }
     };
     
     const submitLead = async () => {

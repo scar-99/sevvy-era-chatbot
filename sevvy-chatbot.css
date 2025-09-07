@@ -168,6 +168,19 @@
     transform: translateY(-2px);
 }
 
+/* NEW: Styles for the "Go Back" button */
+.back-btn {
+    margin-bottom: 10px;
+    border-color: #aaa;
+    color: #777;
+    font-weight: normal;
+}
+.back-btn:hover {
+    background-color: #777;
+    border-color: #777;
+}
+
+
 #text-input-container {
     display: flex;
     align-items: center;
@@ -176,7 +189,6 @@
     border-radius: 25px;
     padding: 0 5px 0 15px;
     transition: border-color 0.2s;
-    /* NEW: Added margin top */
     margin-top: 5px;
 }
 #text-input-container:focus-within {
