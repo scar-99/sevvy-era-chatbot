@@ -189,13 +189,12 @@ document.addEventListener('DOMContentLoaded', () => {
         showFaqButtons();
 
         try {
-            // UPDATED THIS LINE
-            await fetch(fetch('/api/handle-chat', {...})
-, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name, email })
-            });
+// UPDATED THIS LINE
+await fetch('/api/handle-chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, email })
+});
         } catch (error) {
             console.error("Failed to submit lead:", error);
         }
