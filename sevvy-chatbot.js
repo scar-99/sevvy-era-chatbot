@@ -150,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             // UPDATED THIS LINE
-            const response = await fetch('https://sevvyera.com/.netlify/functions/handle-chat', {
+            const response = await fetch('/api/handle-chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ message: userMessage, history: chatHistory }),
@@ -190,7 +190,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             // UPDATED THIS LINE
-            await fetch('https://sevvyera.com/.netlify/functions/handle-lead', {
+            await fetch(fetch('/api/handle-chat', {...})
+, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name, email })
