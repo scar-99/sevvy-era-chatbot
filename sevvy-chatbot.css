@@ -176,6 +176,8 @@
     border-radius: 25px;
     padding: 0 5px 0 15px;
     transition: border-color 0.2s;
+    /* NEW: Added margin top */
+    margin-top: 5px;
 }
 #text-input-container:focus-within {
     border-color: var(--sevvy-primary-color);
