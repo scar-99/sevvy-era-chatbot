@@ -1,0 +1,23 @@
+{
+  "name": "sevvy-era-project",
+  "version": "1.0.0",
+  "main": "sevvy-chatbot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scar-99/sevvy-era-chatbot.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/scar-99/sevvy-era-chatbot/issues"
+  },
+  "homepage": "https://github.com/scar-99/sevvy-era-chatbot#readme",
+  "description": "",
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1"
+  }
+}
