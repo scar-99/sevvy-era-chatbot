@@ -150,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             // UPDATED THIS LINE
-            const response = await fetch('/api/handle-chat', {
+            const response = await fetch('https://sevvy.netlify.app/.netlify/functions/handle-chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ message: userMessage, history: chatHistory }),
@@ -190,10 +190,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
 // UPDATED THIS LINE
-await fetch('/api/handle-chat', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ name, email })
+    const response =await fetch('https://sevvy.netlify.app/.netlify/functions/handle-chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email })
 });
         } catch (error) {
             console.error("Failed to submit lead:", error);
