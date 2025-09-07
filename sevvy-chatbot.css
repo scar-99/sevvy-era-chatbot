@@ -1,4 +1,10 @@
-/* General Chat Widget Container */
+:root {
+    --sevvy-primary-color: #007BFF;
+    --sevvy-surface-color: #ffffff;
+    --sevvy-text-color: #333333;
+    --sevvy-bg-color: #f4f4f4;
+}
+
 #chat-widget-container {
     position: fixed;
     bottom: 20px;
@@ -9,11 +15,9 @@
 #chat-toggle-btn {
     width: 60px;
     height: 60px;
-    background-color: #007BFF; /* A professional blue */
-    color: white;
+    background-color: var(--sevvy-primary-color);
     border: none;
     border-radius: 50%;
-    font-size: 28px;
     cursor: pointer;
     display: flex;
     justify-content: center;
@@ -26,20 +30,25 @@
     transform: scale(1.1);
 }
 
-/* Chat Window */
+#chat-toggle-btn svg {
+    width: 32px;
+    height: 32px;
+    fill: white;
+}
+
 #chat-window {
-    position: absolute;
-    bottom: 80px;
-    right: 0;
     width: 350px;
     height: 500px;
-    background-color: #ffffff;
-    border: 1px solid #e5e7eb;
+    background-color: var(--sevvy-surface-color);
+    border: 1px solid #e0e0e0;
     border-radius: 15px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 5px 25px rgba(0,0,0,0.1);
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    position: absolute;
+    bottom: 80px;
+    right: 0;
     transform: translateY(20px);
     opacity: 0;
     visibility: hidden;
@@ -54,12 +63,12 @@
 
 #chat-header {
     padding: 15px;
-    background-color: #f9fafb;
-    color: #1f2937;
+    background-color: var(--sevvy-primary-color);
+    color: white;
     font-weight: 700;
     text-align: center;
-    border-bottom: 1px solid #e5e7eb;
-    font-size: 1.1rem;
+    border-bottom: 1px solid var(--border-color);
+    flex-shrink: 0;
 }
 
 #chat-messages {
@@ -68,11 +77,10 @@
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    background-color: #f9fafb;
+    gap: 10px;
+    background-color: var(--sevvy-bg-color);
 }
 
-/* Messages */
 .message {
     padding: 10px 15px;
     max-width: 80%;
@@ -82,85 +90,121 @@
 }
 
 .user-message {
-    background-color: #007BFF;
+    background-color: var(--sevvy-primary-color);
     color: white;
     align-self: flex-end;
     border-bottom-right-radius: 4px;
 }
 
 .bot-message {
-    background-color: #e5e7eb;
-    color: #1f2937;
+    background-color: #E9E9EB;
+    color: var(--sevvy-text-color);
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+}
+.bot-message a {
+    color: var(--sevvy-primary-color);
+}
+.bot-error-message {
+    background-color: #ffebee;
+    color: #c62828;
     align-self: flex-start;
     border-bottom-left-radius: 4px;
 }
 
-/* FAQ Buttons */
-#faq-buttons-container {
-    padding: 15px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    border-top: 1px solid #e5e7eb;
-    background-color: #ffffff;
-}
-.faq-button {
-    background-color: #ffffff;
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-    padding: 12px;
-    cursor: pointer;
-    text-align: left;
-    font-weight: 500;
-    color: #111827;
-    transition: background-color 0.2s, border-color 0.2s;
-    width: 100%;
-    font-size: 0.9rem;
-}
-.faq-button:hover {
-    background-color: #f9fafb;
-    border-color: #007BFF;
+#chat-input-area {
+    padding: 10px;
+    border-top: 1px solid #e0e0e0;
 }
 
-/* Input Area */
-#input-area-container {
+#faq-buttons-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.faq-btn {
+    background-color: transparent;
+    border: 1px solid var(--sevvy-primary-color);
+    color: var(--sevvy-primary-color);
+    padding: 8px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.faq-btn:hover {
+    background-color: var(--sevvy-primary-color);
+    color: white;
+}
+
+#text-input-container {
     display: flex;
     align-items: center;
-    border-top: 1px solid #e5e7eb;
-    padding: 5px;
-    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 25px;
+    padding: 0 5px 0 15px;
 }
 
 #chat-input {
-    flex-grow: 1;
+    background-color: transparent;
     border: none;
-    padding: 12px;
+    color: var(--sevvy-text-color);
+    flex-grow: 1;
     outline: none;
-    font-size: 1rem;
-    color: #1f2937;
+    padding: 10px 0;
 }
 
 #send-btn {
-    background-color: #007BFF;
+    background-color: var(--sevvy-primary-color);
     color: white;
     border: none;
     border-radius: 50%;
-    width: 40px;
-    height: 40px;
+    width: 38px;
+    height: 38px;
     cursor: pointer;
     font-size: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: background-color 0.2s;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
 }
-#send-btn:hover {
-    background-color: #0056b3;
-}
-
-/* --- NEW --- SVG Icon Styling */
-#chat-toggle-btn svg {
-    width: 32px;
-    height: 32px;
+#send-btn:active {
+    transform: scale(0.9);
 }
 
+/* Lead Capture & Calendly Styles */
+#lead-capture-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+#lead-capture-form input {
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+}
+#submit-lead-btn {
+    background-color: var(--sevvy-primary-color);
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#calendly-container {
+    height: 300px;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    overflow: hidden;
+}
+#calendly-iframe {
+    width: 100%;
+    height: 100%;
+}
