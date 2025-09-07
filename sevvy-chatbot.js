@@ -53,7 +53,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const calendlyContainer = document.getElementById('calendly-container');
     const submitLeadBtn = document.getElementById('submit-lead-btn');
     const textInputContainer = document.getElementById('text-input-container');
-    const chatInputArea = document.getElementById('chat-input-area');
     const backFromLeadBtn = document.getElementById('back-from-lead-btn');
     const backFromCalendlyBtn = document.getElementById('back-from-calendly-btn');
 
@@ -61,7 +60,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let chatHistory = [];
     let isFirstOpen = true;
     
-    // --- IMPORTANT: Use your specific Calendly EVENT link, not your main profile link ---
     const calendlyUrl = "https://calendly.com/rehanshamal368/15min"; 
 
     // --- FAQ Data ---
@@ -223,25 +221,32 @@ document.addEventListener('DOMContentLoaded', () => {
     backFromLeadBtn.addEventListener('click', showFaqButtons);
     backFromCalendlyBtn.addEventListener('click', showFaqButtons);
     
-    // --- NEW: Proactive Message Logic ---
+    // --- Proactive Message Logic ---
     const showProactiveMessage = () => {
-        if (chatWindow.classList.contains('visible')) return;
+        // Don't show if the chat is already open or has been shown in this session
+        if (chatWindow.classList.contains('visible') || sessionStorage.getItem('proactiveMessageShown')) {
+            return;
+        }
 
         const messageBubble = document.createElement('div');
         messageBubble.id = 'proactive-message';
         messageBubble.textContent = 'How may I assist you?';
         chatWidgetContainer.appendChild(messageBubble);
 
+        // Animate in
         setTimeout(() => {
             messageBubble.classList.add('visible');
+            sessionStorage.setItem('proactiveMessageShown', 'true'); // Mark as shown
         }, 100);
 
+        // Animate out and remove after 10 seconds
         setTimeout(() => {
             messageBubble.classList.remove('visible');
-            setTimeout(() => messageBubble.remove(), 500);
+            setTimeout(() => messageBubble.remove(), 500); // Remove from DOM after transition
         }, 10000);
     };
     
+    // Trigger after 4 seconds
     setTimeout(showProactiveMessage, 4000);
 });
 
