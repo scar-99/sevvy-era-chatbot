@@ -18,15 +18,16 @@ Rules:
 4.  IMPORTANT: Always respond in the same language the user uses. If they write in Hindi, you MUST reply in Hindi.`;
 
 export default async function handler(request) {
-    // --- CORS FIX: Add headers to allow requests from the client's website ---
+    // --- FINAL CORS FIX ---
+    // These headers grant permission for any website to make a POST request.
     const headers = {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*', // Allows all origins
+        'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type',
     };
 
-    // Handle CORS preflight requests
+    // Netlify needs to handle preflight "OPTIONS" requests for CORS to work.
     if (request.method === 'OPTIONS') {
         return new Response(null, { status: 204, headers });
     }
@@ -64,8 +65,8 @@ export default async function handler(request) {
         console.error('AI Error:', error);
         let errorMessage = 'Sorry, I am having trouble connecting to the mothership. Please try again later.';
         
-        if (error.message.includes('SAFETY')) {
-            errorMessage = "I'm sorry, I can't respond to that. Could you please rephrase your question?";
+        if (error.response && error.response.promptFeedback && error.response.promptFeedback.blockReason) {
+            errorMessage = "I'm sorry, I can't respond to that due to safety guidelines. Could you please rephrase?";
         }
 
         return new Response(JSON.stringify({ reply: errorMessage }), {
