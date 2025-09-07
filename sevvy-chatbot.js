@@ -22,9 +22,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             </div>
             <button id="chat-toggle-btn">
-                <!-- NEW SVG LOGO -->
+                <!-- NEW CUSTOM SVG LOGO -->
                 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M16.888 3.12305C16.888 3.12305 21.178 3.53105 21.178 7.39905C21.178 11.267 17.31 11.675 17.31 11.675M17.31 11.675L6.81897 12.324M17.31 11.675L19.453 13.818M6.81897 12.324C6.81897 12.324 2.52897 12.732 2.52897 16.599C2.52897 20.467 6.39697 20.875 6.39697 20.875M6.81897 12.324L4.67597 10.181M6.39697 20.875L17.31 20.875" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M16 4C19.3137 4 22 6.68629 22 10C22 13.3137 19.3137 16 16 16H8C4.68629 16 2 13.3137 2 10C2 6.68629 4.68629 4 8 4" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="17" cy="9" r="1.5" fill="white"/>
+                    <circle cx="7" cy="11" r="1.5" fill="white"/>
+                    <path d="M12 4V8" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M12 16V12" stroke="white" stroke-width="2" stroke-linecap="round"/>
                 </svg>
             </button>
         </div>
