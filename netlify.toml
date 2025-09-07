@@ -1,0 +1,12 @@
+# This is the configuration for your Netlify site.
+
+[build]
+  # Tells Netlify where your serverless functions are located.
+  functions = "api"
+
+# This rule is crucial. It tells Netlify to send any request
+# that starts with /api/ to your serverless functions.
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
