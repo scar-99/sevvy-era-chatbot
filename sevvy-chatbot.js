@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // This HTML is injected into the #chatbot-container div in your client's HTML file.
+    // This HTML is injected into the body of your client's website.
     const chatbotHTML = `
         <div id="chat-widget-container">
             <div id="chat-window">
@@ -22,11 +22,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             </div>
             <button id="chat-toggle-btn">
-                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="black"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
+                <!-- NEW SVG LOGO -->
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M16.888 3.12305C16.888 3.12305 21.178 3.53105 21.178 7.39905C21.178 11.267 17.31 11.675 17.31 11.675M17.31 11.675L6.81897 12.324M17.31 11.675L19.453 13.818M6.81897 12.324C6.81897 12.324 2.52897 12.732 2.52897 16.599C2.52897 20.467 6.39697 20.875 6.39697 20.875M6.81897 12.324L4.67597 10.181M6.39697 20.875L17.31 20.875" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
             </button>
         </div>
     `;
-    // Use insertAdjacentHTML on the body to avoid replacing existing content
     document.body.insertAdjacentHTML('beforeend', chatbotHTML);
 
     // --- Element References ---
@@ -39,27 +41,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const leadCaptureForm = document.getElementById('lead-capture-form');
     const calendlyContainer = document.getElementById('calendly-container');
     const submitLeadBtn = document.getElementById('submit-lead-btn');
+    const textInputContainer = document.getElementById('text-input-container');
+
 
     // --- State Variables ---
     let chatHistory = [];
     let isFirstOpen = true;
     let proactiveTimeout;
-    const calendlyUrl = "https://calendly.com/bobscar964/30min";
+    const calendlyUrl = "https://calendly.com/rehanshamal368"; 
 
     // --- FAQ Data ---
     const faqs = [
-        { q: "What services do you offer?", a: "Sevvy Era is a full-service digital marketing agency. We specialize in Web Development, Social Media Management, SEO, Video Editing, Lead Generation, and Email Marketing." },
-        { q: "How does your pricing work?", a: "Our pricing is customized for each client based on their specific needs. To get a detailed quote, the best step is to book a free 15-minute consultation with our team." },
-        { q: "What's the process to start?", a: "The first step is a free consultation to discuss your goals. From there, we'll create a custom strategy and proposal for your review. Are you ready to book a call?" },
-        { q: "Capture my information", type: "lead-capture" },
-        { q: "Book a free consultation", type: "calendly" }
+        { q: "What are your services?", a: "Sevvy Era offers a full suite of digital marketing services, including Web Development, Social Media Management, SEO, Video Editing, Lead Generation, and advanced Email Marketing campaigns." },
+        { q: "How is pricing determined?", a: "All our strategies are custom-built. Pricing depends on the services you need and the scale of your project. The best first step is a free consultation to discuss your specific goals." },
+        { q:
+"Can you show me results?", a: "Absolutely. We focus on data-driven results. In our initial consultation, we can share case studies relevant to your industry and business goals." },
+        { q: "Submit My Info for a Quote", type: "lead-capture" },
+        { q: "Book a Free Consultation", type: "calendly" }
     ];
 
     // --- Core Functions ---
     const addMessage = (text, sender, addToHistory = true) => {
         const messageElement = document.createElement('div');
         messageElement.className = `message ${sender}-message`;
-        messageElement.innerHTML = text; // Use innerHTML to render links
+        messageElement.innerHTML = text;
         messagesContainer.appendChild(messageElement);
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
         if (addToHistory && sender !== 'bot-typing') {
@@ -81,24 +86,43 @@ document.addEventListener('DOMContentLoaded', () => {
         faqButtonsContainer.style.display = 'flex';
         leadCaptureForm.style.display = 'none';
         calendlyContainer.style.display = 'none';
+        textInputContainer.style.display = 'flex';
+    };
+
+    const promptForFaqs = () => {
+        const promptContainer = document.createElement('div');
+        promptContainer.className = 'faq-prompt-container';
+        const promptButton = document.createElement('button');
+        promptButton.textContent = 'Show Main Questions';
+        promptButton.className = 'faq-btn';
+        promptButton.onclick = () => {
+            addMessage('Show Main Questions', 'user', false);
+            showFaqButtons();
+            promptContainer.remove();
+        };
+        promptContainer.appendChild(promptButton);
+        messagesContainer.appendChild(promptContainer);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
     };
 
     const handleFaqClick = (faq) => {
         addMessage(faq.q, 'user', false);
+        faqButtonsContainer.style.display = 'none';
+        textInputContainer.style.display = 'none';
+
         if (faq.a) {
             addMessage(faq.a, 'bot', false);
+            promptForFaqs();
         }
         if (faq.type === 'lead-capture') {
             leadCaptureForm.style.display = 'flex';
-            faqButtonsContainer.style.display = 'none';
         }
         if (faq.type === 'calendly') {
             const iframe = document.getElementById('calendly-iframe');
-            if(iframe.src !== calendlyUrl) {
+            if (iframe.src !== calendlyUrl) {
                 iframe.src = calendlyUrl;
             }
             calendlyContainer.style.display = 'block';
-            faqButtonsContainer.style.display = 'none';
         }
     };
     
@@ -108,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         addMessage(userMessage, 'user');
         chatInput.value = '';
-        faqButtonsContainer.style.display = 'none'; // Hide FAQs on custom message
+        faqButtonsContainer.style.display = 'none';
         
         const typingIndicator = addMessage('...', 'bot-typing', false);
 
@@ -131,23 +155,20 @@ document.addEventListener('DOMContentLoaded', () => {
             addMessage('Sorry, something went wrong connecting to the server.', 'bot', false);
         }
         
-        // Show the "Bring back FAQs" button
-        faqButtonsContainer.innerHTML = '<button id="show-faqs-again" class="faq-btn">Show Main Questions</button>';
-        document.getElementById('show-faqs-again').onclick = showFaqButtons;
-        faqButtonsContainer.style.display = 'flex';
+        promptForFaqs();
     };
     
     const submitLead = async () => {
         const name = document.getElementById('lead-name').value.trim();
         const email = document.getElementById('lead-email').value.trim();
-        if(!name || !email) {
+        if (!name || !email) {
             addMessage("Please fill out both your name and email.", 'bot-error', false);
             return;
         }
 
         addMessage("Thank you! Our team will be in touch shortly.", 'bot', false);
         leadCaptureForm.style.display = 'none';
-        showFaqButtons();
+        promptForFaqs();
 
         try {
             await fetch('/api/handle-lead', {
@@ -168,7 +189,6 @@ document.addEventListener('DOMContentLoaded', () => {
             showFaqButtons();
             isFirstOpen = false;
         }
-        // Clear proactive timeout if user opens manually
         clearTimeout(proactiveTimeout);
     });
 
@@ -185,12 +205,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const startProactiveTimer = () => {
         proactiveTimeout = setTimeout(() => {
             if (!chatWindow.classList.contains('visible')) {
-                addMessage("Hi there! It looks like you're interested in our services. Do you have any questions I can answer?", 'bot', false);
-                chatWindow.classList.add('visible');
-                showFaqButtons();
-                isFirstOpen = false;
+                toggleButton.classList.add('proactive-pulse');
+                setTimeout(() => toggleButton.classList.remove('proactive-pulse'), 2000);
             }
-        }, 20000); // 20 seconds
+        }, 20000);
     };
     
     startProactiveTimer();
@@ -199,3 +217,4 @@ document.addEventListener('DOMContentLoaded', () => {
         startProactiveTimer();
     });
 });
+
